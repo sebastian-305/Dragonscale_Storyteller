@@ -1,9 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>2b38da6d-ecdb-4f6f-b000-19088b19ce13</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenAI" Version="2.7.0" />
+    <PackageReference Include="PdfPig" Version="0.1.12" />
+    <PackageReference Include="QuestPDF" Version="2025.7.4" />
+  </ItemGroup>
 
 </Project>

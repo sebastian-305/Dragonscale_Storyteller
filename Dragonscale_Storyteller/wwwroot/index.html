@@ -1,18 +1,134 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragonscale Storyteller</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-   <h1>Hello World</h1>
+    <div class="container">
+        <header>
+            <h1>🐉 Dragonscale Storyteller</h1>
+            <p class="subtitle">Verwandle beliebige PDF-Dokumente in kreative Geschichten</p>
+        </header>
 
-    <p id="canvas"></p>
+        <!-- Upload Section -->
+        <section id="upload-section" class="upload-section">
+            <!-- Story Configuration -->
+            <div class="config-section">
+                <h2 class="config-title">Geschichte konfigurieren</h2>
+                
+                <div class="config-grid">
+                    <!-- Language Selection -->
+                    <div class="config-item">
+                        <label for="language-select" class="config-label">Sprache</label>
+                        <select id="language-select" class="config-select">
+                            <option value="de">Deutsch</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
 
-    <script>
+                    <!-- Mood Selection -->
+                    <div class="config-item">
+                        <label for="mood-select" class="config-label">Stimmung</label>
+                        <select id="mood-select" class="config-select">
+                            <option value="neutral">Neutral</option>
+                            <option value="adventure">Abenteuer</option>
+                            <option value="epic">Episch</option>
+                            <option value="happy">Lustig</option>
+                            <option value="sad">Traurig</option>
+                            <option value="horror">Horror</option>
+                            <option value="dramatic">Drama</option>
+                            <option value="romantic">Romantisch</option>
+                            <option value="mysterious">Mysteriös</option>
+                            <option value="inspirational">Inspirierend</option>
+                            <option value="dark">Düster</option>
+                        </select>
+                    </div>
 
-        fetch(`https://${window.location.host}/helloworld`).then(x => x.text()).then(x => document.querySelector("#canvas").innerHTML = x);
+                    <!-- Keywords Input -->
+                    <div class="config-item config-item-full">
+                        <label for="keywords-input" class="config-label">Keywords (optional)</label>
+                        <input 
+                            type="text" 
+                            id="keywords-input" 
+                            class="config-input" 
+                            placeholder="z.B. Abenteuer, Magie, Freundschaft (durch Komma getrennt)"
+                        >
+                        <small class="config-hint">Diese Begriffe werden in die Geschichte eingearbeitet</small>
+                    </div>
+                </div>
+            </div>
 
-    </script>
+            <!-- Upload Area -->
+            <div id="drop-zone" class="drop-zone">
+                <div class="drop-zone-content">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <h2>PDF-Datei hochladen</h2>
+                    <p>Ziehe eine PDF-Datei hierher oder klicke zum Auswählen</p>
+                    <input type="file" id="file-input" accept=".pdf" hidden>
+                    <button id="select-file-btn" class="btn btn-primary">Datei auswählen</button>
+                </div>
+                <div id="drop-zone-active" class="drop-zone-active" hidden>
+                    <p>Datei hier ablegen...</p>
+                </div>
+            </div>
+            
+            <div id="upload-progress" class="upload-progress" hidden>
+                <div class="progress-bar">
+                    <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                </div>
+                <p id="progress-text" class="progress-text">Wird hochgeladen...</p>
+            </div>
+        </section>
+
+        <!-- Error Message -->
+        <div id="error-message" class="error-message" hidden>
+            <div class="error-content">
+                <span class="error-icon">⚠️</span>
+                <span id="error-text"></span>
+            </div>
+            <button id="error-close" class="error-close">&times;</button>
+        </div>
+
+        <!-- Story Display Section -->
+        <section id="story-section" class="story-section" hidden>
+            <div class="story-header">
+                <h2 id="story-title" class="story-title"></h2>
+                <div class="export-buttons">
+                    <button id="export-json-btn" class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        JSON exportieren
+                    </button>
+                    <button id="export-pdf-btn" class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        PDF exportieren
+                    </button>
+                </div>
+            </div>
+
+            <div id="story-phases" class="story-phases">
+                <!-- Story phase cards will be inserted here dynamically -->
+            </div>
+
+            <button id="new-story-btn" class="btn btn-primary btn-large">Neue Geschichte erstellen</button>
+        </section>
+    </div>
+
+    <!-- Story Content Template -->
+    <template id="story-content-template">
+        <div class="story-content">
+            <!-- Images and text will be inserted here -->
+        </div>
+    </template>
+
+    <script src="app.js"></script>
 </body>
 </html>
